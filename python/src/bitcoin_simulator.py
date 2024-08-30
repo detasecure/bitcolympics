@@ -37,9 +37,30 @@ class SimpleBitcoinSimulator:
     def last_block(self):
         return self.blockchain[-1]
 
+class QRBitcoinSimulator(SimpleBitcoinSimulator):
+    def new_transaction(self, sender_public_key, recipient, amount, signature):
+        transaction_data = json.dumps({
+            'sender': sender_public_key,
+            'recipient': recipient,
+            'amount': amount,
+        })
+        if verify_qr_signature(sender_public_key, transaction_data, signature):
+            return super().new_transaction(sender_public_key, recipient, amount, signature)
+        else:
+            raise ValueError("Invalid quantum-resistant signature")
+
+
 # Test the simulator
 if __name__ == "__main__":
-    simulator = SimpleBitcoinSimulator()
+    # simulator = SimpleBitcoinSimulator()
+    # priv, pub = generate_qr_keys()
+    # transaction_data = json.dumps({"sender": pub, "recipient": "recipient_address", "amount": 5})
+    # signature = sign_qr_transaction(priv, transaction_data)
+    # simulator.new_transaction(pub, "recipient_address", 5, signature)
+    # simulator.new_block(None)
+    # print(json.dumps(simulator.blockchain, indent=2))
+
+    simulator = QRBitcoinSimulator()
     priv, pub = generate_qr_keys()
     transaction_data = json.dumps({"sender": pub, "recipient": "recipient_address", "amount": 5})
     signature = sign_qr_transaction(priv, transaction_data)
