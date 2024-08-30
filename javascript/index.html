@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QR-BTF Demo</title>
+</head>
+<body>
+    <h1>QR-BTF Demo</h1>
+    <pre id="output"></pre>
+
+    <script src="qr_crypto.js"></script>
+    <script src="qr_btf_demo.js"></script>
+    <script>
+        // Redirect console.log to the pre element
+        const output = document.getElementById('output');
+        console.log = (...args) => {
+            output.textContent += args.join(' ') + '\n';
+        };
+        console.error = (...args) => {
+            output.textContent += 'Error: ' + args.join(' ') + '\n';
+        };
+
+        // Run the demo when the page loads
+        window.onload = runQRBTFDemo;
+    </script>
+</body>
+</html>
